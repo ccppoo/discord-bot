@@ -1,0 +1,8 @@
+# virtualenv files
+env/
+
+# python cache files
+__pycache__/
+
+# env file for testing local (when using docker-compose in command prompt)
+env-secrets.txt
