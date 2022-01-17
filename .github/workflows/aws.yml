@@ -36,7 +36,7 @@ jobs:
     name: Deploy
     runs-on: ubuntu-latest
 
-    -env:
+    env:
       # AWS ECR Repository name - go to your ECR(Elastic Container Registry) and copy/paste yours
       ECR_REPOSITORY_NAME : my-ecr-demo
 
