@@ -117,6 +117,10 @@ import your other scripts from `./src`
 
 ### aws-task-definition.json
 
+paste from `AWS-ECS-Task Definition`
+
+---
+
 don't need port forwarding, discord bot user is client to discord
 
 and we don't need load balancer (AWS ELB, Elastic Load Balancer)

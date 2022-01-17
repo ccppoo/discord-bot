@@ -1,14 +1,13 @@
 {
   "ipcMode": null,
-  "executionRoleArn": "arn:aws:iam::<<account_id>>:role/ecsTaskExecutionRole",
+  "executionRoleArn": null,
   "containerDefinitions": [
     {
       "dnsSearchDomains": null,
       "environmentFiles": null,
       "logConfiguration": null,
       "entryPoint": null,
-      "portMappings": [
-      ],
+      "portMappings": [],
       "command": null,
       "linuxParameters": null,
       "cpu": 0,
@@ -24,7 +23,7 @@
       "memoryReservation": 128,
       "volumesFrom": [],
       "stopTimeout": null,
-      "image": "<<account_id>>.dkr.ecr.ap-northeast-2.amazonaws.com/my-ecr-demo",
+      "image": "190123161225.dkr.ecr.ap-northeast-2.amazonaws.com/my-ecr-demo",
       "startTimeout": null,
       "firelensConfiguration": null,
       "dependsOn": null,
@@ -46,11 +45,12 @@
   ],
   "placementConstraints": [],
   "memory": null,
-  "taskRoleArn": "arn:aws:iam::<<account_id>>:role/ecsTaskExecutionRole",
+  "taskRoleArn": null,
   "compatibilities": [
+    "EXTERNAL",
     "EC2"
   ],
-  "taskDefinitionArn": "arn:aws:ecs:ap-northeast-2:<<account_id>>:task-definition/my-ecs-demo:1",
+  "taskDefinitionArn": "arn:aws:ecs:ap-northeast-2:190123161225:task-definition/my-ecs-demo:1",
   "family": "my-ecs-demo",
   "requiresAttributes": [
     {
@@ -64,18 +64,6 @@
       "targetType": null,
       "value": null,
       "name": "com.amazonaws.ecs.capability.docker-remote-api.1.21"
-    },
-    {
-      "targetId": null,
-      "targetType": null,
-      "value": null,
-      "name": "com.amazonaws.ecs.capability.task-iam-role"
-    },
-    {
-      "targetId": null,
-      "targetType": null,
-      "value": null,
-      "name": "ecs.capability.execution-role-ecr-pull"
     }
   ],
   "pidMode": null,
@@ -83,6 +71,7 @@
     "EC2"
   ],
   "networkMode": null,
+  "runtimePlatform": null,
   "cpu": null,
   "revision": 1,
   "status": "ACTIVE",
