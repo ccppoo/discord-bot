@@ -42,7 +42,7 @@ jobs:
 
       # AWS ECS service/cluster name - same as above
       ECS_SERVICE_NAME : aws-ecs-demo-service
-      ECS_CLUSTER_NAME : aws-ecs-demo-cluster
+      ECS_CLUSTER_NAME : ecs-demo-cluster
       
       # you could name it as you want
       AWS_CONTAINER_NAME : my-ecr-demo
