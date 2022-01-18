@@ -24,10 +24,11 @@
 #    and best practices on handling the access key credentials.
 
 on:
-  release:
-    types: [created]
-  # run manually
-  workflow_dispatch:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - ''
+  workflow_dispatch:  # trigger manually
 
 name: Deploy to Amazon ECS
 
