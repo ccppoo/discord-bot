@@ -54,6 +54,22 @@ ec2 인스턴스를 사용하기 때문에 프리티어 계정이 아닐 경우 
 
 ## 파일 설명
 
+* [.github/workflows/aws.yml](#githubworkflowsawsyml)
+
+* [Dockerfile](#dockerfile)
+
+* [Dockerfile.dev](#dockerfiledev)
+
+* [docker-compose.yml](#docker-composeyml)
+
+* [requirements.txt](#requirementstxt)
+
+* [app.py](#apppy)
+
+* [aws-task-definition.json](#aws-task-definitionjson)
+
+* [License](#license)
+
 ### .github/workflows/aws.yml
 
 CI/CD를 위한 필수적인 파일입니다.

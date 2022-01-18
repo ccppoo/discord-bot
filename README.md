@@ -28,6 +28,22 @@ by following this, you could develop bot running 24/7 via CI/CD
 
 ## File explainations
 
+* [.github/workflows/aws.yml](#githubworkflowsawsyml)
+
+* [Dockerfile](#dockerfile)
+
+* [Dockerfile.dev](#dockerfiledev)
+
+* [docker-compose.yml](#docker-composeyml)
+
+* [requirements.txt](#requirementstxt)
+
+* [app.py](#apppy)
+
+* [aws-task-definition.json](#aws-task-definitionjson)
+
+* [License](#license)
+
 ### .github/workflows/aws.yml
 
 This file is the key part of CI/CD
