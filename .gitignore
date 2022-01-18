@@ -1,6 +1,9 @@
 # virtualenv files
 env/
 
+# env files for using --build-arg testing in local docker container
+.env
+
 # python cache files
 __pycache__/
 

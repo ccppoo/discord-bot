@@ -1,4 +1,20 @@
+[![ccppoo - discord-bot](https://img.shields.io/static/v1?label=ccppoo&message=discord-bot&color=blue&logo=github)](https://github.com/ccppoo/discord-bot "Go to GitHub repo")
+[![stars - discord-bot](https://img.shields.io/github/stars/ccppoo/discord-bot?style=social)](https://github.com/ccppoo/discord-bot)
+[![forks - discord-bot](https://img.shields.io/github/forks/ccppoo/discord-bot?style=social)](https://github.com/ccppoo/discord-bot)
+
+### Languages
+
+한글 README 읽기 - [![README - 한글](https://img.shields.io/badge/README-한글-2ea44f)](./readme/readme-lang/readme-ko.md)
+
+### branches
+
+[![README - about branches](https://img.shields.io/badge/README-about_branches-2ea44f)](./readme/branches/readme.md) - ENG
+
+[![README - about branches](https://img.shields.io/badge/README-about_branches-2ea44f)](./readme/branches/readme-lang/branches-ko.md) - 한글
+
 # ccppoo/discord-bot
+
+requirements : Docker desktop(optional), git
 
 Deploy your bot on AWS ECS
 
@@ -11,6 +27,22 @@ This repositoty is a basic template for AWS CI/CD
 by following this, you could develop bot running 24/7 via CI/CD
 
 ## File explainations
+
+* [.github/workflows/aws.yml](#githubworkflowsawsyml)
+
+* [Dockerfile](#dockerfile)
+
+* [Dockerfile.dev](#dockerfiledev)
+
+* [docker-compose.yml](#docker-composeyml)
+
+* [requirements.txt](#requirementstxt)
+
+* [app.py](#apppy)
+
+* [aws-task-definition.json](#aws-task-definitionjson)
+
+* [License](#license)
 
 ### .github/workflows/aws.yml
 
@@ -54,22 +86,27 @@ you will see
 
 ### Dockerfile
 
-This file is a recipe how to set up environment and run your code
+This is a recipe how to set up environment and run your code
 
 at the bottom, the enrty point, if your main script name is `main.py` then change to `CMD ["python", "main.py"]`
 
+### Dockerfile.dev
+
+Dockerfile for development in local environment.
+
+I wrote how to use at `Dockerfile.dev` in local machine(Docker desktop)
+
+it's recommanded to test with dockerfile before deploying at AWS ECS.
+
 ### docker-compose.yml
 
-**This file is used for local test** running on docker desktop
+This is used for **AWS ECS** and could use for final test, **before running github action**
 
-As we are not going to host database in other docker container,
-
-we don't configure other docker images.
+As we are not going to host database server docker container, we don't configure other docker images.
 
 Before testing in local enviornment, you should add `env` args in powershell
 
-Make a file named `env-secrets.txt`, you could name whatever you want but don't forget to update `.gitignore`
-
+Make a file named `env-secrets.txt`
 
 ```txt
 # env-secrets.txt
@@ -121,7 +158,7 @@ paste from `AWS-ECS-Task Definition`
 
 ---
 
-don't need port forwarding, discord bot user is client to discord
+not like any other AWS ECS flask demo apps, we don't need port forwarding, discord bot user is client to discord
 
 and we don't need load balancer (AWS ELB, Elastic Load Balancer)
 
@@ -129,8 +166,14 @@ because pycord(discord.py) is event based
 
 If your bot serves hundreds of server, take account of Auto scaling of **AWS EC2** instance
 
-Change **region** and **ECR name** before running
+Change **region** and **ECR, ECS services name** at `.github/workdlows/aws.yml` before running
 
 ## License
 
 MIT
+
+Released under [MIT](/LICENSE) by [@ccppoo](https://github.com/ccppoo).
+
+---
+
+badges used - [michaelcurrin/badge-generator](https://michaelcurrin.github.io/badge-generator/#/)

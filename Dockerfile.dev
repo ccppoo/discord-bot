@@ -1,0 +1,47 @@
+# Dockerfile for testing locally
+# discord bot(Docker Container) <-> Docker Desktop <-> discord server
+
+# For local test before deploying image to AWS ECR(pushing to main branch and running github action), run this command
+# First     ) docker build -f Dockerfile.dev -t discord-bot-dev-local:latest --build-arg DISCORD_BOT_TOKEN=<Your Bot token for Development> .
+# Second    ) docker run discord-bot-dev-local
+#       ... test on discord ...
+# Finally   ) docker ps -q  --filter ancestor=discord-bot-dev-local:latest 
+#           ) docker stop <id you got above>
+
+FROM python:3.8-slim
+
+# install git for installing dependencies via pip <repository>
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install -y git
+
+# add user (change to whatever you want)
+# prevents running sudo commands
+RUN useradd -r -s /bin/bash alex
+
+# set current env
+ENV HOME /app
+WORKDIR /app
+ENV PATH="/app/.local/bin:${PATH}"
+
+RUN chown -R alex:alex /app
+USER alex
+
+# set Discord APP token argument
+ARG DISCORD_BOT_TOKEN
+
+# ENV discord argument
+ENV DISCORD_BOT_TOKEN $DISCORD_BOT_TOKEN
+
+# Avoid cache purge by adding requirements first
+ADD ./requirements.txt ./requirements.txt
+
+RUN pip install --upgrade pip --user
+RUN pip install --no-cache-dir -r ./requirements.txt --user
+
+# Add the rest of the files
+COPY . /app
+WORKDIR /app
+
+# start discord bot
+CMD ["python", "app.py"]

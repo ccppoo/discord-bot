@@ -1,8 +1,8 @@
-version: '3.1'
+version: '3.7'
 
 services:
 
-  aws-ecs-demo:
+  release-to-aws-ecs:
 
     build:
       context: ./
