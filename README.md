@@ -4,7 +4,7 @@
 
 ### Languages
 
-한글 README 읽기 - [![README - 한글](https://img.shields.io/badge/README-한글-2ea44f)](./readme/readme-lang/readme-ko.md)
+한글 README 읽기 - [![README - 한글](https://img.shields.io/badge/README-한글-2ea44f)](./readme/readme-lang/README-ko.md)
 
 ### branches
 

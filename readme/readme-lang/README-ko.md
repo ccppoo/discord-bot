@@ -1,37 +1,3 @@
-AWS 계정
-
-사용되는 것
-
-ECS, elastic container service 
-
-ECR, elastic container registry
-
-EC2, elastic cloud computing
-
-docker, docker desktop
-
-----------------
-
-우선 디스코드 봇과 관련된 파이썬 파일은 나중에
-
-이 개념은 레포지토리에 있는 파일을 모아 도커 이미지로 만들어서 빌드를 한다
-
-그리고 도커 데스크탑을 켜서 빌드를 하고 작동하는지 테스트를 한다.
-
-정상적으로 디스코드 봇이 동작을 하면
-
-AWS에서 계정을 만들고
-
-프로그램적으로 AWS에 로그인을 할 수 있는 IAM - 사용자를 만든다.
-
-ECS, ECR, EC2 권한을 가진 사용자를 만들고
-
-마지막 페이지에서 보여주는 키, 시크릿 키를 저장한다.
-
-저장한 시크릿 키는 깃헙 secrets에 저장한다.
-
-ecs에서 클러스터를 만드는데 로드 벨랜서 없이 만든다.
-
 ### branches
 
 [![README - about branches](https://img.shields.io/badge/README-about_branches-2ea44f)](./readme/branches/readme-lang/branches-ko.md) - 한글
