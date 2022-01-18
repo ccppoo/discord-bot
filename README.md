@@ -14,6 +14,8 @@
 
 # ccppoo/discord-bot
 
+requirements : Docker desktop(optional), git
+
 Deploy your bot on AWS ECS
 
 This Demo requires exprience of running bot user(a.k.a bot server) with python
@@ -140,7 +142,7 @@ paste from `AWS-ECS-Task Definition`
 
 ---
 
-don't need port forwarding, discord bot user is client to discord
+not like any other AWS ECS flask demo apps, we don't need port forwarding, discord bot user is client to discord
 
 and we don't need load balancer (AWS ELB, Elastic Load Balancer)
 
