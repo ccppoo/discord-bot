@@ -12,7 +12,7 @@ AWS ECS에 디스코드 봇을 배포해보세요!
 
 이 레포지토리는 AWS CI/CD를 구축하기 위한 기본적인 템플릿입니다.
 
-![diagram](./readme/img/discord-bot-server-cicd-flow.png)
+![diagram](../img/discord-bot-server-cicd-flow.png)
 
 이 레포지토리를 포크(Fork)를 통해서 만들면 CI/CD를 통해 24시간 365일 내내 구동시킬 수 있습니다.
 
@@ -46,7 +46,7 @@ AWS ECR, ECS(클러스터, 작업)의 이름이 이 레포지토리와 다른 �
 
 `Github Action`을 실행하기 전에 **Github repo Secrets**을 만들어야 합니다.
 
-![github secrets](./readme/img/github-secret-page.png)
+![github secrets](../img/github-secret-page.png)
 
 Github secrets에 값을 한 번 넣으면, 다시 그 값을 읽어 볼 수 없으므로
 
@@ -63,14 +63,14 @@ Github secrets에 값을 한 번 넣으면, 다시 그 값을 읽어 볼 수 없
 3. **AWS_DEFAULT_REGION**
    1. 사용하는 AWS 리전입니다. `AWS - Management Console` (한국의 경우 자동으로 ap-northeast-2로 접속하게 될겁니다)
 
-![check aws region](./readme/img/check-aws-region.png)
+![check aws region](../img/check-aws-region.png)
 
 저의 경우 `ap-northeast-2` 입니다.
 
 4. **DISCORD_BOT_TOKEN**
    1. [discord/developers/applications](https://discord.com/developers/applications)에서 확인할 수 있습니다.
 
-![where you could find bot token](./readme/img/bot-token-at-discord-dev-app.png)
+![where you could find bot token](../img/bot-token-at-discord-dev-app.png)
 
 ------
 
@@ -114,7 +114,7 @@ $env:DISCORD_BOT_TOKEN="<Your discord bot app token"
 
 그리고 `docker-compose up`을 실행하기 전에 복사 붙여넣기를 하면 아래와 같이 보일 겁니다.
 
-![paste env](./readme/img/paste-env-at-ps.png)
+![paste env](../img/paste-env-at-ps.png)
 
 그리고 `docker-compose up --build`을 실행하세요
 
@@ -122,7 +122,7 @@ $env:DISCORD_BOT_TOKEN="<Your discord bot app token"
 
 `Attaching to my-ecr-demo...`라는 메세지가 보이면 디스코드를 켜서 봇이 온라인이 되어있는지 확인하세요
 
-![check bot is online](./readme/img/bot-alive.png)
+![check bot is online](../img/bot-alive.png)
 
 정상적으로 작동하면 AWS에 배포할 준비가 된 것입니다.
 
