@@ -69,6 +69,71 @@ async def hello(ctx : Context):
     view.add_item(button)
     await ctx.send("Hi!", view=view)
 
+"""
+람다 비동기 실행
+
+https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/lambda.html#Lambda.Client.invoke
+
+"""
+
+
+
+@bot.command(
+    name="ssss",
+    description="루프 테스트")
+async def run_lambda(ctx : Context):
+    await ctx.send(f'starting command ssss')
+    
+    def blocking_io():
+        # File operations (such as logging) can block the
+        # event loop: run them in a thread pool.
+        import requests, time
+        try:
+            time.sleep(3)
+            
+            raise Exception("test exception")
+        except Exception as e:
+            return "Test Exception"
+        return 'with 3sec delay ok'
+    
+    loop = asyncio.get_running_loop()
+
+    ## Options:
+
+    # 1. Run in the default loop's executor:
+    result = await loop.run_in_executor(None, blocking_io)
+    print('default thread pool', result)
+    await ctx.send(f'1) loop.run_in_executor with None')
+
+    # 2. Run in a custom thread pool:
+    with concurrent.futures.ThreadPoolExecutor() as pool:
+        result = await loop.run_in_executor(
+            pool, blocking_io)
+        print('custom thread pool', result)
+    
+    await ctx.send(f'2) loop.run_in_executor with ThreadPoolExecutor')
+    
+    # await ctx.send(result)
+        
+    # import boto3
+    # lambda_client = boto3.client('lambda')
+    # lambda_payload = {'body' : {'data' : 'hello'}}
+    
+    # response = client.invoke(
+    #     FunctionName='string',
+    #     InvocationType='Event'|'RequestResponse'|'DryRun',
+    #     LogType='None'|'Tail',
+    #     ClientContext='string',
+    #     Payload=b'bytes'|file,
+    #     Qualifier='string'
+    # )
+
+    # lambda_client.invoke(FunctionName='myfunctionname', 
+    #                     InvocationType='Event',
+    #                     Payload=lambda_payload)
+    # boto3.invoke()
+    
+    
 
 @bot.command(description="랜덤으로 골라주기 사용법: !랜덤 하나 둘 셋")
 async def 랜덤(ctx : Context, *choices: List[str]):
