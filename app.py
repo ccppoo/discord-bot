@@ -26,6 +26,11 @@ intents.members = True
 bot = commands.Bot(command_prefix="!", description=description, intents=intents)
 
 
+import threading
+import concurrent.futures
+
+concurrent.futures.ThreadPoolExecutor
+
 # library.py 에서 import 한 명령어
 # bot.add_command(도서관)
 # bot.add_application_command(library_command)
@@ -55,8 +60,14 @@ async def on_message(message : Message):
     # 사용자가 보낸 메세지 객체 - 길드 이름, 유저 이름, 아이디, ... 많은 정보를 가지고 있습니다.
     print(message)
     # 보낸 메세지
-    print(message.content)
+    # print(message.content)
     
+    # print(f"{message.activity=}")
+    # print(f"{message.application=}")
+    # print(f"{message.attachments=}")
+    # print(f"{message.components=}")
+    # print(f"{message.mentions=}")
+    # print(f"{message.webhook_id=}")
     # 위에 명시한 command_prefix(명령어 접두어)가 포함된 메세지의 경우
     # 명령을 수행하기 위해 이 코드는 on_message 함수 맨 아래에 작성합니다!
     await bot.process_commands(message)
@@ -69,6 +80,70 @@ async def hello(ctx : Context):
     view.add_item(button)
     await ctx.send("Hi!", view=view)
 
+"""
+람다 비동기 실행
+
+https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/lambda.html#Lambda.Client.invoke
+
+"""
+
+
+
+@bot.command(
+    name="async",
+    description="루프 테스트")
+async def run_lambda(ctx : Context):
+    
+    def blocking_io():
+        # File operations (such as logging) can block the
+        # event loop: run them in a thread pool.
+        import requests, time
+        try:
+            time.sleep(3)
+            
+            raise Exception("test exception")
+        except Exception as e:
+            return e
+        return 'with 3sec delay ok'
+    
+    loop = asyncio.get_running_loop()
+
+    ## Options:
+
+    # 1. Run in the default loop's executor:
+    result = await loop.run_in_executor(None, blocking_io)
+    print('default thread pool', result)
+    await ctx.send(f'1) loop.run_in_executor with None')
+
+    # 2. Run in a custom thread pool:
+    with concurrent.futures.ThreadPoolExecutor() as pool:
+        result = await loop.run_in_executor(
+            pool, blocking_io)
+        print('custom thread pool', result)
+    
+    await ctx.send(f'1) loop.run_in_executor with ThreadPoolExecutor')
+    
+    # await ctx.send(result)
+        
+    # import boto3
+    # lambda_client = boto3.client('lambda')
+    # lambda_payload = {'body' : {'data' : 'hello'}}
+    
+    # response = client.invoke(
+    #     FunctionName='string',
+    #     InvocationType='Event'|'RequestResponse'|'DryRun',
+    #     LogType='None'|'Tail',
+    #     ClientContext='string',
+    #     Payload=b'bytes'|file,
+    #     Qualifier='string'
+    # )
+
+    # lambda_client.invoke(FunctionName='myfunctionname', 
+    #                     InvocationType='Event',
+    #                     Payload=lambda_payload)
+    # boto3.invoke()
+    
+    
 
 @bot.command(description="랜덤으로 골라주기 사용법: !랜덤 하나 둘 셋")
 async def 랜덤(ctx : Context, *choices: List[str]):
