@@ -75,6 +75,10 @@ async def on_message(message : Message):
 
 @bot.command(description="안녕!")
 async def hello(ctx : Context):
+    import time
+    
+    time.sleep(5)
+    
     button = Button(label="Click me!", style=discord.ButtonStyle.green, emoji="😂")
     view = View()
     view.add_item(button)
@@ -87,6 +91,41 @@ https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/lambd
 
 """
 
+@bot.command(
+    name="dddd",
+    description="루프 테스트 2" )
+async def run_lambda(ctx : Context):
+    await ctx.send(f'starting command dddd')
+
+    def blocking_io():
+        # File operations (such as logging) can block the
+        # event loop: run them in a thread pool.
+        import  time
+        try:
+            time.sleep(3)
+            
+            raise Exception("test exception")
+        except Exception as e:
+            return "Test Exception"
+        return 'with 3sec delay ok'
+    
+    loop = asyncio.get_running_loop()
+    await ctx.send(f'get event loop 2')
+
+    ## Options:
+
+    # 1. Run in the default loop's executor:
+    result = await loop.run_in_executor(None, blocking_io)
+    print('default thread pool', result)
+    await ctx.send(f'1) loop.run_in_executor with None 2222')
+
+    # 2. Run in a custom thread pool:
+    with concurrent.futures.ThreadPoolExecutor() as pool:
+        result = await loop.run_in_executor(
+            pool, blocking_io)
+        print('custom thread pool', result)
+    
+    await ctx.send(f'2) loop.run_in_executor with ThreadPoolExecutor 2222')
 
 
 @bot.command(
@@ -98,9 +137,9 @@ async def run_lambda(ctx : Context):
     def blocking_io():
         # File operations (such as logging) can block the
         # event loop: run them in a thread pool.
-        import requests, time
+        import time
         try:
-            time.sleep(3)
+            asyncio.sleep(3)
             
             raise Exception("test exception")
         except Exception as e:
@@ -108,6 +147,7 @@ async def run_lambda(ctx : Context):
         return 'with 3sec delay ok'
     
     loop = asyncio.get_running_loop()
+    await ctx.send(f'get event loop')
 
     ## Options:
 
