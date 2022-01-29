@@ -26,6 +26,11 @@ intents.members = True
 bot = commands.Bot(command_prefix="!", description=description, intents=intents)
 
 
+import threading
+import concurrent.futures
+
+concurrent.futures.ThreadPoolExecutor
+
 # library.py 에서 import 한 명령어
 # bot.add_command(도서관)
 # bot.add_application_command(library_command)
@@ -55,8 +60,14 @@ async def on_message(message : Message):
     # 사용자가 보낸 메세지 객체 - 길드 이름, 유저 이름, 아이디, ... 많은 정보를 가지고 있습니다.
     print(message)
     # 보낸 메세지
-    print(message.content)
+    # print(message.content)
     
+    # print(f"{message.activity=}")
+    # print(f"{message.application=}")
+    # print(f"{message.attachments=}")
+    # print(f"{message.components=}")
+    # print(f"{message.mentions=}")
+    # print(f"{message.webhook_id=}")
     # 위에 명시한 command_prefix(명령어 접두어)가 포함된 메세지의 경우
     # 명령을 수행하기 위해 이 코드는 on_message 함수 맨 아래에 작성합니다!
     await bot.process_commands(message)
