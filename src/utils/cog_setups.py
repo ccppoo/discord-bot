@@ -197,16 +197,13 @@ class BotUtils(commands.Cog):
             await ctx.send(f'`{cog_name}` 모듈을 찾을 수 없습니다')
         except ExtensionNotLoaded:
             await ctx.send(f'`{cog_name}` 모듈은 로드되어 있지 않습니다')
+        except Exception:
+            msg = self.__self_examinate(cog_name)
+            await ctx.send(msg)
             
         else:
             sm = self.success_msg.format(f"`{cog_name}` 리로드")
             await ctx.send(sm)
-            return
-        
-        finally:
-            # only for when exception handled
-            msg = self.__self_examinate(cog_name)
-            await ctx.send(msg)
             
 def setup(bot : commands.Bot):
     bot.add_cog(BotUtils(bot))
