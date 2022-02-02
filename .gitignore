@@ -9,3 +9,6 @@ __pycache__/
 
 # env file for testing local (when using docker-compose in command prompt)
 env-secrets.txt
+
+# log data
+logs/

@@ -1,7 +1,6 @@
 from discord.ext.commands.context import Context
 from discord.ext import commands
 from ..loader import *
-import discord.ext.commands.errors as discordErrors
 from discord.errors import (
     ExtensionAlreadyLoaded,
     ExtensionNotLoaded,

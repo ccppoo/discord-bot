@@ -16,7 +16,7 @@ bot = commands.Bot(command_prefix=["!", "?"], description=description, intents=i
 for cog in get_utils_cog():
     bot.load_extension(cog)
 
-for cog in get_commands_cog('slash_commands'):
+for cog in get_commands_cog():
     bot.load_extension(cog)
 
 bot.run(TOKEN)
