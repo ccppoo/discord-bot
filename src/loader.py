@@ -18,7 +18,7 @@ def get_utils_cog() -> List[str]:
     cog_names = []
 
     for name in os.listdir(bot_utils):
-        # Cog 파일이 아닌, 유틸성 함수만 있는 경우
+        # Cog 클래스가 정의된 아닌 파일은 반드시 소문자로만 작성
         if name == name.lower():
             continue
         
@@ -41,9 +41,11 @@ def get_commands_cog(*dir : Optional[List[str]] ) -> List[str]:
     
     `discord-bot/src/commands` 폴더가 아닌 다른 위치에 있는 커맨드의 경우
     
-    예) discord-bot/src/slash_commands/sample
-    
-        `get_commands_cog('slash_commands', 'sample')`와 같이 사용하면 됩니다.
+    예) discord-bot/src/slash_commands/anotherdir/MySlashCommand.py 에 정의한 Cog 클래스가 있는 경우
+        
+        discord-bot/app.py 에
+        
+        `get_commands_cog('slash_commands', 'anotherdir')`와 같이 사용하면 됩니다.
     '''
     
     if not dir:
@@ -55,7 +57,7 @@ def get_commands_cog(*dir : Optional[List[str]] ) -> List[str]:
     
     for name in os.listdir(cogdir):
         # Cog 클래스가 정의된 아닌 파일은 반드시 소문자로만 작성
-        if name != name.lower():
+        if name == name.lower():
             continue
         
         if not os.path.isfile(os.path.join(cogdir, name)):
