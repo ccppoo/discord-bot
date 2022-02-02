@@ -18,6 +18,13 @@ def get_utils_cog() -> List[str]:
     cog_names = []
 
     for name in os.listdir(bot_utils):
+        # Cog 파일이 아닌, 유틸성 함수만 있는 경우
+        if name == name.lower():
+            continue
+        
+        if not os.path.isfile(os.path.join(bot_utils, name)):
+            continue
+        
         if name.endswith('.py'):
             module_name = os.path.basename(name)[:-3]
             cog_name = '.'.join(('src', 'utils', module_name))
@@ -47,8 +54,16 @@ def get_commands_cog(*dir : Optional[List[str]] ) -> List[str]:
     cog_names = []
     
     for name in os.listdir(cogdir):
+        # Cog 클래스가 정의된 아닌 파일은 반드시 소문자로만 작성
+        if name != name.lower():
+            continue
+        
+        if not os.path.isfile(os.path.join(cogdir, name)):
+            continue
+        
         if name.endswith('.py'):
             module_name = os.path.basename(name)[:-3]
             cog_name = '.'.join(('src', *dir, module_name))
             cog_names.append(cog_name)
+
     return cog_names
