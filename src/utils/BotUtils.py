@@ -8,26 +8,18 @@ from discord.errors import (
     ExtensionFailed,
     ExtensionNotFound
 )
-from discord.ext.commands.errors import (
-    CommandError,
-    CommandNotFound,
-    CommandOnCooldown,
-    CommandInvokeError,
-    CommandRegistrationError,
-    DisabledCommand
-)
 
 import pathlib, os
 
-'''
-1. @commands.command( 옵션... )
-    옵션은 아래 링크 참고!
-    https://discordpy.readthedocs.io/en/latest/ext/commands/api.html#discord.ext.commands.Command
+__doc__ = '''
+BotUtils(commands.Cog)는 커맨드가 작성된 스크립트가 업로드 된 이후로
+동적으로 모듈을 리로드하기 위한 디버깅을 위한 Cog 모듈입니다.
 
-2. @commands.함수()
-    다른 기능들은 아래 링크 참고! : https://gist.github.com/Painezor/eb2519022cd2c907b56624105f94b190
+AWS 배포를 하면(Github -> ECR -> ECS -> EC2) 로컬에서 즉시 코드를 수정하고 업로드 한 것을 반영할 수 없고,
+수정 후 최소 빌드 후 배포까지 평균적으로 3~5 분이 소요됨으로
 
-    @commands.is_owner() : 봇 운영자(코드 말고 봇 토큰 주인)만 사용할 수 있도록 제한한 것
+커맨드 오작동으로 인한 `Cog 언로드`, 이벤트 성으로 잠시 동작하는 커맨드를 위해 `Cog 로드/언로드`, 등등
+코드 변경을 반영하기 위한 Cog 모듈 로드 작업은 릴리즈 이후 할 수 없으므로 유의할 것   
 '''
 
 EXAMPLE_SETUP_FUNCTION = '''
@@ -49,63 +41,6 @@ class BotUtils(commands.Cog):
     async def I_am_ready(self, ):
         print("BotUtils(commands.Cog) ready")
         self.__set_cogs()
-    
-    '''
-    on_command event reference
-    https://docs.pycord.dev/en/master/ext/commands/api.html?highlight=on_command#event-reference
-    
-    on_command      : 커맨드가 실행되면 실제 커맨드를 정의한 함수와 아래 listener 모두 호출 됨
-    on_command_error    : 커맨드가 실행되면 실제 커맨드를 정의한 함수와 아래 listener 모두 호출 됨
-    on_command_completion   : 커맨드 실행이 완료되면 실행,
-    '''
-    @commands.Cog.listener("on_command")
-    async def on_command(self, ctx: Context):
-        print(f'on_command invoked Cog : {ctx.cog.__module__}')
-
-    @commands.Cog.listener("on_command_error")
-    async def on_command_error(self, ctx : Context, exception : Exception):
-        
-        # TODO : fill with usefull error message
-        
-        if isinstance(exception, CommandNotFound):
-            err_msg = "on_command_error :: CommandNotFound\n"
-            err_msg +="`{exception}`"
-            await ctx.send(err_msg)
-        
-        if isinstance(exception, CommandInvokeError):
-            cog_path = (ctx.cog.__module__).replace('.', '/')
-            err_msg = "on_command_error :: CommandInvokeError\n"
-            err_msg += f"`{exception}`\n"
-            err_msg += f"Error from : `{pathlib.Path(cog_path)}`"
-            await ctx.send(err_msg)
-        
-        if isinstance(exception, CommandError):
-            await ctx.send(exception)
-        
-        if isinstance(exception, CommandOnCooldown):
-            await ctx.send(exception)
-        
-        if isinstance(exception, CommandRegistrationError):
-            await ctx.send(exception)
-        
-        if isinstance(exception, DisabledCommand):
-            await ctx.send(exception)
-        
-        print(f"{exception=}")
-        
-        
-    @commands.Cog.listener("on_command_completion")
-    async def on_command_completion(self, ctx : Context):
-        # TODO : split command error cases and add message for debuging
-        pass
-    
-    @commands.Cog.listener("on_application_command_error")
-    async def on_application_command_error(self, ctx : Context, exception : Exception):
-        cog_path = (ctx.cog.__module__).replace('.', '/')
-        err_msg = "on_application_command_error\n"
-        err_msg += f"`{exception}`"
-        err_msg += f"Error at : `{pathlib.Path(cog_path)}`"
-        await ctx.send(err_msg)
 
     def __generate_cog_path(self, cog_name : str) -> str:
         '''
@@ -138,6 +73,11 @@ class BotUtils(commands.Cog):
         msg = f"작성하신 스크립트에 에러가 없는지 확인하세요 : `{full_cog_path}.py`"
         return msg
 
+    '''
+    @commands.함수()
+        다른 기능들은 아래 링크 참고! : https://gist.github.com/Painezor/eb2519022cd2c907b56624105f94b190
+        @commands.is_owner() : 봇 운영자(코드 말고 봇 토큰 주인)만 사용할 수 있도록 제한한 것
+    '''
     @commands.command(name='load', hidden=True)
     @commands.is_owner()
     async def load_cog(self, ctx : Context, *, cog_name : str):
