@@ -8,6 +8,15 @@ from discord.errors import (
     ExtensionFailed,
     ExtensionNotFound
 )
+from discord.ext.commands.errors import (
+    CommandError,
+    CommandNotFound,
+    CommandOnCooldown,
+    CommandInvokeError,
+    CommandRegistrationError,
+    DisabledCommand
+)
+
 import pathlib, os
 
 '''
@@ -21,7 +30,7 @@ import pathlib, os
     @commands.is_owner() : 봇 운영자(코드 말고 봇 토큰 주인)만 사용할 수 있도록 제한한 것
 '''
 
-example_func = '''
+EXAMPLE_SETUP_FUNCTION = '''
 ```py
 def setup(bot):
     bot.add_cog(YourCogClass(bot))
@@ -34,10 +43,69 @@ class BotUtils(commands.Cog):
         self.bot : commands.Bot = bot
         self.__base = 'src'
         self.success_msg = "`성공적으로 {}했습니다!`"
+        self.cogs_list = None # will initiate after on_ready
 
     @commands.Cog.listener("on_ready")
     async def I_am_ready(self, ):
         print("BotUtils(commands.Cog) ready")
+        self.__set_cogs()
+    
+    '''
+    on_command event reference
+    https://docs.pycord.dev/en/master/ext/commands/api.html?highlight=on_command#event-reference
+    
+    on_command      : 커맨드가 실행되면 실제 커맨드를 정의한 함수와 아래 listener 모두 호출 됨
+    on_command_error    : 커맨드가 실행되면 실제 커맨드를 정의한 함수와 아래 listener 모두 호출 됨
+    on_command_completion   : 커맨드 실행이 완료되면 실행,
+    '''
+    @commands.Cog.listener("on_command")
+    async def on_command(self, ctx: Context):
+        print(f'on_command invoked Cog : {ctx.cog.__module__}')
+
+    @commands.Cog.listener("on_command_error")
+    async def on_command_error(self, ctx : Context, exception : Exception):
+        
+        # TODO : fill with usefull error message
+        
+        if isinstance(exception, CommandNotFound):
+            err_msg = "on_command_error :: CommandNotFound\n"
+            err_msg +="`{exception}`"
+            await ctx.send(err_msg)
+        
+        if isinstance(exception, CommandInvokeError):
+            cog_path = (ctx.cog.__module__).replace('.', '/')
+            err_msg = "on_command_error :: CommandInvokeError\n"
+            err_msg += f"`{exception}`\n"
+            err_msg += f"Error from : `{pathlib.Path(cog_path)}`"
+            await ctx.send(err_msg)
+        
+        if isinstance(exception, CommandError):
+            await ctx.send(exception)
+        
+        if isinstance(exception, CommandOnCooldown):
+            await ctx.send(exception)
+        
+        if isinstance(exception, CommandRegistrationError):
+            await ctx.send(exception)
+        
+        if isinstance(exception, DisabledCommand):
+            await ctx.send(exception)
+        
+        print(f"{exception=}")
+        
+        
+    @commands.Cog.listener("on_command_completion")
+    async def on_command_completion(self, ctx : Context):
+        # TODO : split command error cases and add message for debuging
+        pass
+    
+    @commands.Cog.listener("on_application_command_error")
+    async def on_application_command_error(self, ctx : Context, exception : Exception):
+        cog_path = (ctx.cog.__module__).replace('.', '/')
+        err_msg = "on_application_command_error\n"
+        err_msg += f"`{exception}`"
+        err_msg += f"Error at : `{pathlib.Path(cog_path)}`"
+        await ctx.send(err_msg)
 
     def __generate_cog_path(self, cog_name : str) -> str:
         '''
@@ -46,6 +114,10 @@ class BotUtils(commands.Cog):
         cwd = os.getcwd()
         cog_path = pathlib.Path(os.path.join(cwd, self.__base, *cog_name.split('.')))
         return cog_path
+
+    def __set_cogs(self, ):
+        self.cogs_list =['.'.join(x) for x in  [x.split('.')[1:] for x in self.bot.extensions.keys()]]
+        print(f"{self.cogs_list=}")
 
     def __is_dot_py(self, cog_name : str) -> bool:
         '''
@@ -97,7 +169,7 @@ class BotUtils(commands.Cog):
             
             msg = f'엔트리 포인트를 찾을 수 없습니다(setup 함수)\n`{full_path}`'
             msg +=f'\n아래와 같은 함수가 정의되어 있는지 확인하길 바랍니다.'
-            msg +=f'\n{example_func}'
+            msg +=f'\n{EXAMPLE_SETUP_FUNCTION}'
             await ctx.send(msg)
             
         except Exception:
@@ -107,9 +179,10 @@ class BotUtils(commands.Cog):
         else:
             sm = self.success_msg.format(f"{cog_name} 로드")
             await ctx.send(sm)
-            return
         
-    
+        finally:
+            self.__set_cogs()
+        
     @commands.command(name='unload', hidden=True)
     @commands.is_owner()
     async def unload_cog(self, ctx: Context, *, cog_name : str):
@@ -140,6 +213,8 @@ class BotUtils(commands.Cog):
             sm = self.success_msg.format(f"`{cog_name}` 언로드")
             await ctx.send(sm)
         
+        finally:
+            self.__set_cogs()
         
     @commands.command(name='reload', hidden=True)
     @commands.is_owner()
@@ -175,8 +250,16 @@ class BotUtils(commands.Cog):
         else:
             sm = self.success_msg.format(f"`{cog_name}` 리로드")
             await ctx.send(sm)
-            
-
+        
+        finally:
+            self.__set_cogs()
+    
+    @commands.command(name='cogs', hidden=True)
+    @commands.is_owner()
+    async def show_cogs(self, ctx: Context):
+        cogss = ', '.join([f'`{x}`' for x in self.cogs_list])
+        await ctx.reply(cogss)
+    
     @commands.command(name='reload-all', hidden=True)
     @commands.is_owner()
     @commands.check(lambda x : False) # 지금은 사용 X -> discord.ext.commands.errors.CheckFailure
@@ -203,6 +286,9 @@ class BotUtils(commands.Cog):
         else:
             sm = self.success_msg.format(f"`{cog_name}` 리로드")
             await ctx.send(sm)
+            
+        finally:
+            self.__set_cogs()
             
 def setup(bot : commands.Bot):
     bot.add_cog(BotUtils(bot))
