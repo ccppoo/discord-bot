@@ -13,6 +13,7 @@ services:
         - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
         - AWS_CONTAINER_NAME=${AWS_CONTAINER_NAME}
         - DISCORD_BOT_TOKEN=${DISCORD_BOT_TOKEN}
+        - RELEASE=1
 
     container_name: ${AWS_CONTAINER_NAME}
     
@@ -22,5 +23,6 @@ services:
       - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
       - AWS_CONTAINER_NAME=${AWS_CONTAINER_NAME}
       - DISCORD_BOT_TOKEN=${DISCORD_BOT_TOKEN}
+      - RELEASE=1
     # bridge - connect to docker container from localhost
     network_mode: bridge

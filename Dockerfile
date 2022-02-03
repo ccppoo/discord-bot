@@ -33,6 +33,9 @@ ARG DISCORD_BOT_TOKEN
 # ENV discord argument
 ENV DISCORD_BOT_TOKEN $DISCORD_BOT_TOKEN
 
+# DISTINGUISH DEVELOPMENT <-> DISTRIBUTE / true == 1, false == 0
+ENV RELEASE $RELEASE
+
 # Avoid cache purge by adding requirements first
 ADD ./requirements.txt ./requirements.txt
 
