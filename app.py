@@ -22,5 +22,3 @@ for cog in get_commands_cog():
     bot.load_extension(cog)
 
 bot.run(TOKEN)
-
-#asdf;lkjsa;ldfjs;alkd
